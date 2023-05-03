@@ -15,7 +15,7 @@ class _BluetoothSearchState extends State<BluetoothSearch> {
 
     if (appState.favorites.isEmpty) {
       return Center(
-        child: Text('No favorites yet.'),
+        child: Text('No devices yet.'),
       );
     }
 
@@ -25,7 +25,7 @@ class _BluetoothSearchState extends State<BluetoothSearch> {
         Padding(
           padding: const EdgeInsets.all(30),
           child: Text('You have '
-              '${appState.favorites.length} favorites:'),
+              '${appState.favorites.length} devices:'),
         ),
         Expanded(
           // Make better use of wide windows with a grid.
