@@ -33,6 +33,9 @@ class MyAppState extends ChangeNotifier {
   var current = WordPair.random();
   var history = <WordPair>[];
 
+  int rows = 20;
+  int cols = 20;
+
   GlobalKey? historyListKey;
 
   void getNext() {
@@ -159,4 +162,3 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
-

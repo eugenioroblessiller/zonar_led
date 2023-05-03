@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:zonar_led/main.dart';
 
 class DynamicGrid extends StatefulWidget {
   @override
@@ -7,16 +9,18 @@ class DynamicGrid extends StatefulWidget {
 }
 
 class _DynamicGridState extends State<DynamicGrid> {
-  int _rows = 2;
-  int _cols = 2;
-
-  List<List<int>> _grid = List.generate(
-    2,
-    (_) => List.generate(2, (_) => 0),
-  );
-
   @override
   Widget build(BuildContext context) {
+    var appState = context.watch<MyAppState>();
+
+    int rows = appState.rows;
+    int cols = appState.cols;
+
+    List<List<int>> grid = List.generate(
+      2,
+      (_) => List.generate(2, (_) => 0),
+    );
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Dynamic Grid'),
@@ -31,15 +35,15 @@ class _DynamicGridState extends State<DynamicGrid> {
                 ElevatedButton(
                   child: Text('Add Row'),
                   onPressed: () => setState(() {
-                    _rows++;
-                    _grid.add(List.generate(_cols, (_) => 0));
+                    appState.rows++;
+                    grid.add(List.generate(cols, (_) => 0));
                   }),
                 ),
                 ElevatedButton(
                   child: Text('Add Column'),
                   onPressed: () => setState(() {
-                    _cols++;
-                    for (var row in _grid) {
+                   appState.cols++;
+                    for (var row in grid) {
                       row.add(0);
                     }
                   }),
@@ -47,18 +51,18 @@ class _DynamicGridState extends State<DynamicGrid> {
                 ElevatedButton(
                   child: Text('Remove Row'),
                   onPressed: () => setState(() {
-                    if (_rows > 1) {
-                      _rows--;
-                      _grid.removeLast();
+                    if (rows > 1) {
+                      appState.rows--;
+                      grid.removeLast();
                     }
                   }),
                 ),
                 ElevatedButton(
                   child: Text('Remove Column'),
                   onPressed: () => setState(() {
-                    if (_cols > 1) {
-                      _cols--;
-                      for (var row in _grid) {
+                    if (cols > 1) {
+                      appState.cols--;
+                      for (var row in grid) {
                         row.removeLast();
                       }
                     }
@@ -69,26 +73,26 @@ class _DynamicGridState extends State<DynamicGrid> {
             SizedBox(height: 10),
             Expanded(
               child: GridView.builder(
-                itemCount: _rows * _cols,
+                itemCount: rows * cols,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: _cols,
+                  crossAxisCount: cols,
                   mainAxisSpacing: 10,
                   crossAxisSpacing: 10,
                   childAspectRatio: 1,
                 ),
                 itemBuilder: (BuildContext context, int index) {
-                  int row = index ~/ _cols;
-                  int col = index % _cols;
+                  int r = 0;
+                  int g = 0;
+                  int b = 0;
                   return GestureDetector(
                     onTap: () => showDialog(
                         context: context,
                         builder: (_) => AlertDialog(
-                              title: Text("Dialog"),
+                              title: Text("Choose a color"),
                               content: Text("this is the dialog"),
                             )),
                     child: Container(
-                      color:
-                          _grid[row][col] == 0 ? Colors.grey[300] : Colors.blue,
+                      color: Color.fromARGB(255, 94, 116, 134),
                     ),
                   );
                 },
