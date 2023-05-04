@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:provider/provider.dart';
+import 'package:zonar_led/connection_detail.dart';
 import 'package:zonar_led/main.dart';
 
 class BluetoothSearch extends StatefulWidget {
@@ -57,7 +58,7 @@ class _BluetoothSearchState extends State<BluetoothSearch> {
             itemBuilder: (BuildContext context, int index) {
               final device = devicesList[index];
               return ListTile(
-                title: Text(device.name ?? 'Unknown'),
+                title: Text(device.name),
                 subtitle: Text(device.id.toString()),
                 onTap: () {
                   // Do something when the device is tapped
@@ -73,10 +74,12 @@ class _BluetoothSearchState extends State<BluetoothSearch> {
   }
 }
 
-
 void _showConnectToDeviceDialog(BuildContext context, BluetoothDevice device) {
+  // Store a reference to the current BuildContext in a variable
+  final currentContext = context;
+
   showDialog(
-    context: context,
+    context: currentContext,
     builder: (BuildContext context) {
       return AlertDialog(
         title: Text('Connect to ${device.name}?'),
@@ -84,7 +87,7 @@ void _showConnectToDeviceDialog(BuildContext context, BluetoothDevice device) {
           TextButton(
             child: Text('No'),
             onPressed: () {
-              Navigator.of(context).pop();
+              Navigator.of(currentContext).pop();
             },
           ),
           TextButton(
@@ -92,9 +95,14 @@ void _showConnectToDeviceDialog(BuildContext context, BluetoothDevice device) {
             onPressed: () async {
               // Connect to the device
               await device.connect();
-              // Do something else after the device is connected
-              // ...
-              Navigator.of(context).pop();
+
+              // Navigate to the new page with the connection details
+              Navigator.push(
+                currentContext,
+                MaterialPageRoute(
+                  builder: (context) => ConnectionDetailsPage(device: device),
+                ),
+              );
             },
           ),
         ],
