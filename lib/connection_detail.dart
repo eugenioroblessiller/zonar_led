@@ -10,6 +10,15 @@ class ConnectionDetailsPage extends StatelessWidget {
   const ConnectionDetailsPage({Key? key, required this.device})
       : super(key: key);
 
+  Future<void> _disconnectFromDevice() async {
+    try {
+      await device.disconnect();
+      print("disconnect from device...");
+    } catch (e) {
+      print('Error disconnecting from device: $e');
+    }
+  }
+
   void _sendPatternToBluetoothDevice() async {
     // Set display pattern
     // MessageType = 04
@@ -29,11 +38,11 @@ class ConnectionDetailsPage extends StatelessWidget {
 
     // Find the characteristic to write to
     final service = await device.discoverServices();
-    final characteristic = service
-        .map((s) => s.characteristics)
-        .expand((c) => c)
-        .firstWhere(
-            (c) => c.uuid == Guid('00002a28-0000-1000-8000-00805f9b34fb'));
+    final characteristic =
+        service.map((s) => s.characteristics).expand((c) => c).firstWhere((c) {
+      print(c);
+      return c.uuid == Guid('00002a28-0000-1000-8000-00805f9b34fb');
+    });
 
     // Write the message to the characteristic
     final bytes = Uint8List.fromList(message);
@@ -46,11 +55,11 @@ class ConnectionDetailsPage extends StatelessWidget {
 
     // Find the characteristic to write to
     final service = await device.discoverServices();
-    final characteristic = service
-        .map((s) => s.characteristics)
-        .expand((c) => c)
-        .firstWhere(
-            (c) => c.uuid == Guid('00002a28-0000-1000-8000-00805f9b34fb'));
+    final characteristic =
+        service.map((s) => s.characteristics).expand((c) => c).firstWhere((c) {
+      print(c);
+      return c.uuid == Guid('00002a28-0000-1000-8000-00805f9b34fb');
+    });
 
     // Convert the string to bytes and write it to the characteristic
     final bytes = utf8.encode(randomString);
@@ -76,6 +85,11 @@ class ConnectionDetailsPage extends StatelessWidget {
               Text('Connected to ${device.name}'),
               Text('Device ID: ${device.id}'),
               // Add more details about the connection here
+              MaterialButton(
+                onPressed: _disconnectFromDevice,
+                color: Colors.red,
+                child: Text('Disconnect'),
+              ),
             ],
           ),
         ),
