@@ -28,23 +28,30 @@ class ConnectionDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Connection Details'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('Connected to ${device.name}'),
-            Text('Device ID: ${device.id}'),
-            // Add more details about the connection here
-          ],
+    return WillPopScope(
+      onWillPop: () async {
+        // Navigate back to the previous screen
+        Navigator.pop(context);
+        return true;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Connection Details'),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _sendStringToBluetoothDevice,
-        child: Icon(Icons.send),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text('Connected to ${device.name}'),
+              Text('Device ID: ${device.id}'),
+              // Add more details about the connection here
+            ],
+          ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: _sendStringToBluetoothDevice,
+          child: Icon(Icons.send),
+        ),
       ),
     );
   }
