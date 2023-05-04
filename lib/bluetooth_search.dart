@@ -62,6 +62,7 @@ class _BluetoothSearchState extends State<BluetoothSearch> {
                 onTap: () {
                   // Do something when the device is tapped
                   print('Tapped on device: ${device.name}');
+                  _showConnectToDeviceDialog(context, device);
                 },
               );
             },
@@ -70,4 +71,34 @@ class _BluetoothSearchState extends State<BluetoothSearch> {
       ],
     );
   }
+}
+
+
+void _showConnectToDeviceDialog(BuildContext context, BluetoothDevice device) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Connect to ${device.name}?'),
+        actions: <Widget>[
+          TextButton(
+            child: Text('No'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          TextButton(
+            child: Text('Yes'),
+            onPressed: () async {
+              // Connect to the device
+              await device.connect();
+              // Do something else after the device is connected
+              // ...
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
 }
