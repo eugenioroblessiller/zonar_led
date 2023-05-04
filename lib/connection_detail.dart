@@ -60,7 +60,8 @@ class ConnectionDetailsPage extends StatelessWidget {
         .expand((c) => c)
         .firstWhere(
             (c) => c.uuid == Guid('00002a28-0000-1000-8000-00805f9b34fb'));
-
+    print("----------------------------");
+    print(characteristic);
     // Convert the string to bytes and write it to the characteristic
     final bytes = utf8.encode(randomString);
     await characteristic.write(bytes);
